@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    @if(Session::has('pesan'))
+        <div class="alert alert-success">{{Session::get('pesan')}}</div>
+    @endif
     <title>BUKUKU</title>
     <style>
         table {
@@ -43,8 +46,15 @@
                 <td>{{ ++$no }}</td>
                 <td>{{ $buku->judul }}</td>
                 <td>{{ $buku->penulis }}</td>
-                <td>{{ "Rp ".number_format($buku->harga, 2, ',', '.') }}</td>
-                <td>{{ Carbon\Carbon::parse($buku->tgl_terbit)->format('d-M-Y G:ia') }}</td>
+                <td>{{ number_format($buku->harga, 0, ',', ',') }}</td>
+                <td>{{ $buku->tgl_terbit->format('d/m/Y') }}</td>
+                <td>
+                    <form action="{{ route('buku.search) }}" method="get">
+                        @csrf
+                        <input type="text" name="kata" class="form-control" placeholder="Cari..." style="width: 30%;
+                        display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
+                    </form>
+                </td>
                 <td>
                     <form action="{{ route('buku.destroy', $buku->id) }}" method="post">
                         @csrf
@@ -62,9 +72,12 @@
             <td colspan="3">Jumlah Data: {{ count($data_buku) }}</td>
             </tr>
             <tr>
-            <td colspan="3">Total Harga Semua Buku: {{ "Rp ".number_format($data_buku->sum('harga'), 2, ',', '.') }}</td>            </tr>
+            <td colspan="3">Total Harga Semua Buku: {{ "Rp ".number_format($data_buku->sum('harga'), 2, ',', '.') }}</td>            
+            </tr>
         </tfoot>
     </table>
+    <div>{{ $data_buku->links() }}</div>
+    <div><strong>Jumlah Buku: {{ $jumlah_buku }}</strong></div>
     <p align="center"><a href="{{ route('buku.create') }}">Tambah Buku</a></p>
 </body>
 </html>
