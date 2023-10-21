@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Validate;
 use App\Models\Buku;
 
 class BukuController extends Controller
@@ -59,7 +59,7 @@ class BukuController extends Controller
             'judul' => 'required|string',
             'penulis' => 'required|string|max:30',
             'harga' => 'required|numeric',
-            'tgl_terbit' => 'required\date'
+            'tgl_terbit' => 'required|date'
         ]);
         return redirect('/buku')->with('pesan','Data Buku Berhasil di Tambah');
     }

@@ -29,6 +29,9 @@
     </style>
 </head>
 <body>
+    @section('content')
+    if(count($data_buku))
+        <div class="alert alert-success">Ditemukan <strong>{{count($data_buku)}}</strong> data dengan kata: <strong>{{ $cari }}</strong></div>
     <table>
         <thead>
             <tr>
@@ -49,7 +52,7 @@
                 <td>{{ number_format($buku->harga, 0, ',', ',') }}</td>
                 <td>{{ $buku->tgl_terbit->format('d/m/Y') }}</td>
                 <td>
-                    <form action="{{ route('buku.search') }}" method="get">
+                    <form action="{{ route('buku.search) }}" method="get">
                         @csrf
                         <input type="text" name="kata" class="form-control" placeholder="Cari..." style="width: 30%;
                         display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
@@ -79,5 +82,11 @@
     <div>{{ $data_buku->links() }}</div>
     <div><strong>Jumlah Buku: {{ $jumlah_buku }}</strong></div>
     <p align="center"><a href="{{ route('buku.create') }}">Tambah Buku</a></p>
+    
+    @else
+        <div class="alert alert-warning"><h4>Data {{ $cari }} tidak ditemukan</h4>
+        <a href="/buku" class="btn btn-warning">Kembali</a></div>
+    @endif
+    @endsection
 </body>
 </html>
