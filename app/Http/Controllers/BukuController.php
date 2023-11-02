@@ -61,6 +61,12 @@ class BukuController extends Controller
             'harga' => 'required|numeric',
             'tgl_terbit' => 'required|date'
         ]);
+        Buku::create([
+            'judul' => $request->judul,
+            'penulis' => $request->penulis,
+            'harga' => $request->harga,
+            'tgl_terbit' => $request->tgl_terbit
+        ]);
         return redirect('/buku')->with('pesan','Data Buku Berhasil di Tambah');
     }
 

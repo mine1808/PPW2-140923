@@ -29,6 +29,13 @@
     </style>
 </head>
 <body>
+    <td>
+        <form action="{{ route('buku.search') }}" method="get">
+            @csrf
+            <input type="text" name="kata" class="form-control" placeholder="Cari..." style="width: 30%;
+            display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
+            </form>
+    </td>
     <table>
         <thead>
             <tr>
@@ -47,14 +54,7 @@
                 <td>{{ $buku->judul }}</td>
                 <td>{{ $buku->penulis }}</td>
                 <td>{{ number_format($buku->harga, 0, ',', ',') }}</td>
-                <td>{{ $buku->tgl_terbit->format('d/m/Y') }}</td>
-                <td>
-                    <form action="{{ route('buku.search') }}" method="get">
-                        @csrf
-                        <input type="text" name="kata" class="form-control" placeholder="Cari..." style="width: 30%;
-                        display: inline; margin-top: 10px; margin-bottom: 10px; float: right;">
-                    </form>
-                </td>
+                <td>{{ $buku->tgl_terbit }}</td>
                 <td>
                     <form action="{{ route('buku.destroy', $buku->id) }}" method="post">
                         @csrf

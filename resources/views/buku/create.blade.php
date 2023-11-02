@@ -18,8 +18,8 @@
         <input type="text" name="harga" id="harga">
     </div>
     <div>Tgl. Terbit
-        <input type="text" name="tgl_terbit" id="tgl_terbit"
-        class="date form-control" placehorder="yyyy/mm/dd">
+        <input type="date" name="tgl_terbit" id="tgl_terbit"
+        class="date form-control" placehorder="dd/mm/yyyy">
     </div>
     <div><button type="submit">Simpan</button></div>
     <a href="/buku"> Batal</a>
