@@ -8,6 +8,10 @@ use App\Models\Buku;
 
 class BukuController extends Controller
 {
+
+    public function _construct(){
+        $this->middleware("auth");
+    }
     /**
      * Display a listing of the resource.
      *
@@ -125,7 +129,4 @@ class BukuController extends Controller
         return redirect('/buku')->with('pesan','Data Buku Berhasil di Hapus');
     }
 
-    public function _construct(){
-        $this->middleware('auth');
-    }
 }
