@@ -16,7 +16,7 @@ class Admin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if($request->level !="admin") {
+        if($request->user()->level !="admin") {
             return redirect("/buku");
         }
         return $next($request);

@@ -12,8 +12,8 @@ class Buku extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        \App\Models\Buku::factory(20)->create();
+        \App\Models\Buku::factory(10)->create();
     }
 }
