@@ -37,4 +37,5 @@ Route::middleware('auth')->group(function () {
     });
 });
 
+Route::get('/list_buku', [BukuController::class, 'listBuku']);
 require __DIR__.'/auth.php';

@@ -10,6 +10,10 @@ use App\Models\Gallery;
 class BukuController extends Controller
 {
 
+    public function listBuku(){
+        $data_buku = Buku::all();
+        return view('list_buku', compact('data_buku'));
+    }
     public function _construct(){
         $this->middleware("auth");
     }
