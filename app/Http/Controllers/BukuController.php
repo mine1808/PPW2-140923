@@ -4,13 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Gallery;
 use Illuminate\Http\Request;
-//* TAMBAHKAN KODE BERIKUT UNTUK MEMANGGIL MODEL BUKU
 use App\Models\Buku;
 use Intervention\Image\Facades\Image;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
-// use Image;
 
 class BukuController extends Controller
 {
