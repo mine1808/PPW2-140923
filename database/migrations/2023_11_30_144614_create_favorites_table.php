@@ -11,17 +11,21 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('galeri', function (Blueprint $table) {
+        Schema::create('favorites', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_galeri');
-            $table->string('galeri_seo')->nullable();
-            $table->text('keterangan')->nullable();
-            $table->string('foto');
+            
+            $table->unsignedBigInteger('user_id');
+            $table->foreign('user_id')
+                ->references('id')
+                ->on('users')
+                ->onDelete('cascade');
+
             $table->unsignedBigInteger('buku_id');
             $table->foreign('buku_id')
                 ->references('id')
                 ->on('buku')
                 ->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -31,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('galeri');
+        Schema::dropIfExists('favorites');
     }
 };

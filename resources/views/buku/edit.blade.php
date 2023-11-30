@@ -1,87 +1,102 @@
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
-        <title>Bukuku</title>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    </head>
-    <body class="bg-gray-100">
-        @if(session('pesan_delete'))
-            <div class="alert alert-success">
-                {{ session('pesan_delete') }}
-            </div>
-        @endif
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Edit Buku') }}
+        </h2>
+    </x-slot>
 
-        <div class="container mx-auto p-4">
-            <h4 class="text-center text-2xl font-bold mb-4">Edit Buku</h4>
+    <div class="container" style="margin-top: 5%">
+        <div class="w-full max-w">
+
             @if(count($errors) > 0)
-                <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
-                    <strong class="font-bold">Terjadi kesalahan!</strong>
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
+                <ul class="alert alert-danger">
+                    @foreach ($errors->all() as $error)
+                        <li style="margin-left: 16px">{{ $error }}</li>
+                    @endforeach
+                </ul>
             @endif
             
-
-            <form action="{{ route('buku.update', $buku->id) }}" method="POST" enctype="multipart/form-data" id="uploadForm">
+            <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" method="POST" action="{{ route('buku.update', $buku->id) }}" enctype="multipart/form-data">
                 @csrf
                 <div class="mb-4">
-                    <label for="judul" class="text-gray-900">Judul</label>
-                    <input type="text" class="w-full mt-1 px-2 py-2 rounded-lg border" name="judul" id="judul" value="{{ $buku->judul }}">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="inputJudul">Judul</label> 
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" class="form-control" name="judul" id="inputJudul" value="{{ $buku->judul }}">
                 </div>
                 <div class="mb-4">
-                    <label for="penulis" class="text-gray-900">Penulis</label>
-                    <input type="text" class="w-full mt-1 px-2 py-2 rounded-lg border" name="penulis" id="penulis" value="{{ $buku->penulis }}">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="inputPenulis">Penulis</label> 
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" class="form-control" name="penulis" id="inputPenulis" value="{{ $buku->penulis }}">
                 </div>
                 <div class="mb-4">
-                    <label for="harga" class="text-gray-900">Harga</label>
-                    <input type="text" class="w-full mt-1 px-2 py-2 rounded-lg border" name="harga" id="harga" value="{{ $buku->harga }}">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="inputHarga">Harga</label> 
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" class="form-control" name="harga" id="inputHarga" value="{{ $buku->harga }}">
                 </div>
                 <div class="mb-4">
-                    <label for="tgl_terbit" class="text-gray-900">Tgl. terbit</label>
-                    <input type="text" class="w-full mt-1 px-2 py-2 rounded-lg border" name="tgl_terbit" id="tgl_terbit" value="{{ $buku->tgl_terbit }}">
-                </div>
-                <div class="mb-4">
-                    <label for="thumbnail" class="text-gray-900">Thumbnail</label>
-                    <input type="file" class="w-full mt-1 px-2 py-2 rounded-lg border" name="thumbnail" id="thumbnail">
-                </div>
-                
-                <div class="mb-4">
-                    <label for="file_upload" class="text-gray-900">Gallery</label>
-                    <div class="mt-2" id="fileinput_wrapper"></div>
-                    <button class="bg-blue-500 text-white rounded-md py-2 px-4 mx-3 my-2 hover:opacity-70" type="button" onclick="addFileInput()">Tambah</button>
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="inputTgl_terbit">Tanggal Terbit</label> 
+                    @php
+                        $formattedDate = date('Y-m-d', strtotime(str_replace('/', '-', $buku->tgl_terbit)));
+                    @endphp
+                    <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="date" class="form-control" name="tgl_terbit" id="inputTgl_terbit" value="{{ $formattedDate }}">
                 </div>
 
-                <div class="flex flex-row space-x-4">
+                {{-- THUMBNAIL --}}
+                <div class="mb-4">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="thumbnail">Thumbnail</label> 
+                    {{-- @if ( $buku->filepath )
+                    <div class="relative h-20 w-20 mt-3 mb-3">
+                        <img
+                            class="h-full w-full object-cover object-center"
+                            src="{{ asset($buku->filepath) }}"
+                            alt="thumbnail"
+                        />
+                    </div>
+                    @endif  --}}
+                    <input type="file" class="form-control" name="thumbnail" id="thumbnail">
+                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PNG, JPEG or JPG (MAX 2048kb).</p>
+                </div>
+            
+                {{-- GALLERY --}}
+                <div class="col-span-full mt-6">
+                    <label class="block text-gray-700 text-sm font-bold mb-2" for="gallery">Gallery</label>
+                    <div class="mt-2 mb-3" id="fileinput_wrapper">
+                        
+                    </div>
+                    <a href="javascript:void(0);" id="tambah" class="btn btn-success mb-4" onclick="addFileInput()">+ Tambah</a>
+                    <script type="text/javascript">
+                        function addFileInput () {
+                            var div = document.getElementById('fileinput_wrapper');
+                            div.innerHTML += '<input type="file" name="gallery[]" id="gallery" class="block w-full mb-2 form-control">';
+                        };
+                    </script>
+                </div>
+
+                <hr>
+
+                <div class="mt-3 flex justify-end">
+                    <button type="submit" class="btn btn-primary ml-3" style="background-color: #0069D9;"><i class="fa-regular fa-floppy-disk"></i>&nbsp;Simpan</button>
+                    <a href="/buku" class="btn btn-danger ml-3"><i class="fa-solid fa-ban"></i>&nbsp;Batal</a>
+                </div>
+            </form>
+
+            @if($buku->galleries()->count() > 0)
+                <p class="block text-gray-700 text-xl font-bold mb-2">Image Gallery</p>
+                <div class="gallery_items flex flex-wrap">
                     @foreach($buku->galleries()->get() as $gallery)
-                        <div class="relative group">
-                            <img class="rounded-sm object-cover object-center" src="{{ asset($gallery->path) }}" alt="" width="200"/>
-                            <button class="bg-red-500 text-white rounded-md px-2 my-2 hover:opacity-70"><a href="{{ route('galeri.delete', $gallery->id) }}">Delete</a>
+                        <div class="gallery_item m-3 relative">
+                            <img
+                            class="object-cover object-center"
+                            src="{{ asset($gallery->path) }}"
+                            alt=""
+                            width="200"
+                            />
+                            <form action="{{ route('buku.destroyImage', [$buku->id, $gallery->id]) }}" method="POST" class="absolute top-1 right-1">
+                                @csrf
+                                <button class="btn btn-danger mt-1 mb-1" onClick="return confirm('Are you sure?')"><i class="fas fa-trash"></i></button>
+                            </form>
                         </div>
                     @endforeach
                 </div>
-
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="bg-green-500 text-white rounded-md py-2 px-4 hover:opacity-70">Simpan</button>
-                    <a href="/buku" class="bg-gray-500 text-white rounded-md py-2 px-4 hover:opacity-70 ml-2">Batal</a>
-                </div>
-            </form>
+            @endif         
+           
         </div>
- 
-        <script type="text/javascript">
-            function addFileInput() {
-                var div = document.getElementById('fileinput_wrapper');
-                div.innerHTML += '<input class="w-full mt-1 px-2 py-2 rounded-lg border" type="file" name="gallery[]">';
-            }
-        </script>
-
-
-
-    </body>
-</html>
+    </div>
+</x-app-layout>

@@ -14,6 +14,8 @@ class Buku extends Seeder
      */
     public function run(): void
     {
-        \App\Models\Buku::factory(10)->create();
+        \App\Models\Buku::factory()
+                    ->count(10)
+                    ->create();
     }
 }

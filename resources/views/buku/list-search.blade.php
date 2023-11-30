@@ -18,7 +18,7 @@
                     <a style="left: right; margin-bottom: 16px" href="{{ route('buku.create') }}">
                         <button class="btn btn-success"><i class="fa-solid fa-plus"></i>&nbsp;Tambah Buku</button>
                     </a>
-                    <form action="{{ route('buku.search') }}" method="get">
+                    <form action="{{ route('buku.listSearch') }}" method="get">
                         @csrf
                         <div class="input-group">
                             <input type="text" name="kata" class="form-control" placeholder="Cari..." aria-label="Cari" style="border-radius: 8px 0 0 8px">
@@ -67,7 +67,7 @@
             </div>
         </div>
         @else
-            <div class="alert alert-warning">
+            <div class="">
                 <h4>Data {{ $cari }} tidak ditemukan</h4>
                 <a href="/buku" class="btn btn-warning">Kembali</a>
             </div>

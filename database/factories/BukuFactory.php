@@ -17,10 +17,10 @@ class BukuFactory extends Factory
     public function definition(): array
     {
         return [
-            'judul' => $this->faker->title(),
+            'judul' => $this->faker->name(),
             'penulis' => $this->faker->name(),
-            'harga'=> $this->faker->numberbetween(10000, 100000),
-            'tgl_terbit' => $this->faker->date(),
+            'harga' => $this->faker->numberBetween(50000,200000),
+            'tgl_terbit' => $this->faker->date()
         ];
     }
 }
