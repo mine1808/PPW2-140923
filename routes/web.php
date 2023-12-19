@@ -50,6 +50,21 @@ Route::middleware('auth')->group(function () {
         Route::post('/buku/delete/{id}', [BukuController::class, 'destroy'])->name('buku.destroy');
         Route::post('/buku/edit/{id}/delete-image/{image_id}', [BukuController::class, 'destroyImage'])->name('buku.destroyImage');
         
+         // Rute baru untuk halaman "Buku Populer"
+        Route::get('/buku/populer', [BukuController::class, 'populer'])->name('buku.populer');
+
+        // Rute baru untuk kategori buku
+        Route::get('/buku/tambah-kategori/{id}', [BukuController::class, 'tambahKategoriForm'])->name('buku.tambahKategori');
+        Route::post('/buku/tambah-kategori/{id}', [BukuController::class, 'tambahKategori'])->name('buku.tambahKategori');
+        Route::get('/buku/by-kategori/{kategori_id}', [BukuController::class, 'bukuByKategori'])->name('buku.byKategori');
+
+        // Rute baru untuk review buku
+        Route::get('/buku/tambah-review/{id}', [BukuController::class, 'tambahReviewForm'])->name('buku.tambahReview');
+        Route::post('/buku/tambah-review/{id}', [BukuController::class, 'tambahReview'])->name('buku.tambahReview');
+        Route::get('/buku/moderasi-review', [BukuController::class, 'moderasiReview'])->name('buku.moderasiReview');
+        Route::post('/buku/moderasi-review/{id}/approve', [BukuController::class, 'aproveReview'])->name('buku.aproveReview');
+        Route::post('/buku/moderasi-review/{id}/reject', [BukuController::class, 'rejectReview'])->name('buku.rejectReview');
+    
     });
 });
 

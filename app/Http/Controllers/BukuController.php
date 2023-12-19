@@ -9,6 +9,7 @@ use Intervention\Image\Facades\Image;
 use App\Models\Rating;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Models\KategoriBuku;
 
 class BukuController extends Controller
 {
@@ -221,6 +222,7 @@ class BukuController extends Controller
         return view('buku.galeri', compact('buku', 'galeris', 'rating', 'existingRating'));
     }
 
+    //FUNGSI FAV BUKU
     public function showFavoriteBuku()
     {
         $userId = Auth::id();
@@ -234,4 +236,89 @@ class BukuController extends Controller
         return view('buku.favorite', compact('favoriteBooks', 'no'));
     }
 
+    //FUNGSI POPULER BUKU
+    public function populer()
+    {
+        $batas = 10;
+        
+        // Menggunakan query untuk mendapatkan 10 buku dengan rating tertinggi
+        $data_buku = Buku::with('rating')
+            ->withCount('rating as avg_rating')
+            ->orderByDesc('avg_rating')
+            ->paginate($batas);
+
+        $no = $batas * ($data_buku->currentPage() - 1);
+
+        return view('buku.populer', compact('data_buku', 'no'));
+    }
+
+    //FUNGSI KATEGORI BUKU
+    public function tambahKategoriForm($id)
+    {
+        $buku = Buku::find($id);
+        $kategori = KategoriBuku::all();
+        
+        return view('buku.tambah-kategori', compact('buku', 'kategori'));
+    }
+
+    public function tambahKategori(Request $request, $id)
+    {
+        $this->validate($request, [
+            'kategori_id' => 'required|array',
+        ]);
+
+        $buku = Buku::find($id);
+        $buku->kategori()->sync($request->kategori_id);
+
+        return redirect()->back()->with('pesan', 'Kategori berhasil ditambahkan pada buku.');
+    }
+
+    public function bukuByKategori($kategori_id)
+    {
+        $kategori = KategoriBuku::find($kategori_id);
+        $buku = $kategori->buku;
+
+        return view('buku.by-kategori', compact('kategori', 'buku'));
+    }
+
+    public function tambahReviewForm($id)
+    {
+        $buku = Buku::find($id);
+
+        return view('buku.tambah-review', compact('buku'));
+    }
+
+public function tambahReview(Request $request, $id)
+    {
+        $this->validate($request, [
+            'isi' => 'required|string',
+        ]);
+
+        $buku = Buku::find($id);
+
+        $review = new Review;
+        $review->user_id = Auth::id();
+        $review->buku_id = $buku->id;
+        $review->isi = $request->isi;
+        
+        // Profanity filter (contoh: filter kata-kata kasar)
+        $profanityFilter = ['kata1', 'kata2', 'kata3']; // Ganti dengan daftar kata kasar sesuai kebutuhan
+        foreach ($profanityFilter as $word) {
+            if (stripos($request->isi, $word) !== false) {
+                $review->moderasi = true;
+                break;
+            }
+        }
+
+        $review->save();
+
+        return redirect()->back()->with('pesan', 'Review berhasil ditambahkan.');
+    }
+
+    public function moderasiReview()
+    {
+        $reviews = Review::where('moderasi', true)->get();
+
+        return view('buku.moderasi-review', compact('reviews'));
+    }
 }

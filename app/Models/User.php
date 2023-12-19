@@ -48,4 +48,9 @@ class User extends Authenticatable
         return $this->belongsToMany(Buku::class, 'favorites', 'user_id', 'buku_id')->withTimestamps();
     }
 
+    public function review()
+    {
+        return $this->hasMany(Review::class);
+    }
+
 }
